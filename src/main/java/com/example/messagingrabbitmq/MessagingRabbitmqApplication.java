@@ -10,6 +10,11 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spring.web.plugins.Docket;
+
+import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 @SpringBootApplication
 public class MessagingRabbitmqApplication {
@@ -49,7 +54,15 @@ public class MessagingRabbitmqApplication {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		SpringApplication.run(MessagingRabbitmqApplication.class, args).close();
+		SpringApplication.run(MessagingRabbitmqApplication.class, args);
 	}
 
+	@Bean
+	public Docket api() {
+		return new Docket(SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.example.messagingrabbitmq"))
+				.paths(PathSelectors.any())
+				.build();
+	}
 }
